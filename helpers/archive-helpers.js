@@ -8,7 +8,8 @@ var _ = require('underscore');
  * if you move any files, you'll only need to change your code in one place! Feel free to
  * customize it in any way you wish.
  */
-
+ var archivePath = '/../web/archives/sites.txt';
+// dirname = '127..../helpers/../archives/sites.txt'
 exports.paths = {
   'siteAssets' : path.join(__dirname, '../web/public'),
   'archivedSites' : path.join(__dirname, '../archives/sites'),
@@ -26,13 +27,10 @@ exports.initialize = function(pathsObj){
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(){
-  var archivePath = '/../web/archives/sites.txt';
   var alldata = fs.readFileSync(__dirname + archivePath, "utf-8", function(err, data){
     if(err) console.log("error: " + err);
     return JSON.stringify(data);
   });
-
-  console.log(typeof alldata);
   return alldata;
 };
 
@@ -41,7 +39,9 @@ exports.isUrlInList = function(url){
   return _.contains(list, url); //["fb", 'google]
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(url){
+  fs.appendFileSync(this.paths.list, url + "\n", "utf-8");
+  //WRITE to sites.txt
 };
 
 exports.isURLArchived = function(){
