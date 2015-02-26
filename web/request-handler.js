@@ -24,12 +24,13 @@ exports.handleRequest = function (req, res) {
         if(err) console.log(err);
         res.end(JSON.stringify(data));
       });
-    } else if (!archive.isUrlInList(pathname)) {
-      //fs.writeFileSync(archive.paths.list, pathname + "\n");
-      headers['Content-Type'] = 'application/json';
-      res.writeHead(302, headers);
-      res.end(JSON.stringify("Please wait"));
     }
+    // else if (!archive.isUrlInList(pathname)) {
+    //   //fs.writeFileSync(archive.paths.list, pathname + "\n");
+    //   headers['Content-Type'] = 'application/json';
+    //   res.writeHead(302, headers);
+    //   res.end(JSON.stringify("Please wait"));
+    // }
     else {
       headers['Content-Type'] = 'application/json';
       res.writeHead(404, headers);

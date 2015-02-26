@@ -26,16 +26,28 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(){
-  var alldata = fs.readFileSync(__dirname + archivePath, "utf-8", function(err, data){
-    if(err) console.log("error: " + err);
-    return JSON.stringify(data);
+exports.readListOfUrls = function(callback, req, res){
+  fs.readFile(this.paths.list, "utf-8", function(err, data){
+      if(err) {
+        console.log("error: " + err);
+      }
+      var list = data.split('\n');
+
+      for (var i = 0; i < list.length; i++) {
+        callback(list[i], i, list);
+      }
+      // return JSON.stringify(data);
   });
-  return alldata;
+  //List: ['website1.com', 'website2.com']
+
 };
 
 exports.isUrlInList = function(url){
-  var list = this.readListOfUrls().split('\n');
+  var alldata = fs.readFileSync(__dirname + archivePath, "utf-8", function(err, data){
+      if(err) console.log("error: " + err);
+      return JSON.stringify(data);
+  });
+  var list = alldata.split('\n');
   return _.contains(list, url); //["fb", 'google]
 };
 

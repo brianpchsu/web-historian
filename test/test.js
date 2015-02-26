@@ -106,11 +106,11 @@ describe("html fetcher helpers", function(){
 
   it("should read urls from sites.txt", function(done){
     var urlArray = ["example1.com", "example2.com"];
-    var resultArray;
+    var resultArray = [];
 
     fs.writeFileSync(archive.paths.list, urlArray.join("\n"));
     archive.readListOfUrls(function(urls){
-      resultArray = urls;
+      resultArray.push(urls);
     });
 
     waitForThen(
