@@ -22,6 +22,7 @@ exports.handleRequest = function (req, res) {
   var archivePath = "./archives/sites" + pathname;
   var defaultPath = './public/index.html';
   var redirectPath = './public/loading.html';
+  console.log(archivePath)
 
   if (req.method ==="GET"){
     if (pathname === '/') {
@@ -29,6 +30,9 @@ exports.handleRequest = function (req, res) {
       // headers['Content-Type'] = 'application/json';
       // res.writeHead(200, headers);
       // res.end(JSON.stringify("<input"));
+    } else if (pathname === '/public/loading.html') {
+      serveHTML(redirectPath, req, res);
+
     } else if (fs.existsSync(archivePath)) {
       serveHTML(archivePath, req, res);
       // headers['Content-Type'] = 'application/json';
@@ -57,24 +61,32 @@ exports.handleRequest = function (req, res) {
 
     req.on('end', function() {
       var allData = qs.parse(data);
-
       var askurl = allData.url;
-      console.log(askurl);
+
       if (!archive.isUrlInList(askurl)) {
+        res.writeHead(302, {
+          'Location': redirectPath,
+          'Content-Type': 'text/html'
+        });
+        // serveHTML(redirectPath, req, res);
+        res.end();
         //REDIRECT to loading
-        serveHTML(redirectPath, req, res);
+        // serveHTML(redirectPath, req, res);
         //PUT requested site into sites.txt
         archive.addUrlToList(askurl);
         //TELLL worker to extract html and place in archive
 
       } else {
-        console.log('in the url IS found branch')
-      }
+        console.log('in the url is found branch')
+        res.writeHead(302, {
+          'Location': askurl,
+          'Content-Type': 'text/html'
+        });
+        res.end();
 
-
-
-      res.writeHead(302, headers);
-      res.end(JSON.stringify(data));
+        }
+      // res.writeHead(302, headers);
+      // res.end(JSON.stringify(data));
     });
 
 

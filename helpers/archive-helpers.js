@@ -50,7 +50,6 @@ exports.isUrlInList = function(url){
 };
 
 exports.addUrlToList = function(url){
-  console.log(this.paths.list);
   fs.appendFileSync(this.paths.list, url + "\n", "utf-8");
   //WRITE to sites.txt
 };
