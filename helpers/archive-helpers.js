@@ -26,9 +26,19 @@ exports.initialize = function(pathsObj){
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(){
+  var archivePath = '/../web/archives/sites.txt';
+  var alldata = fs.readFileSync(__dirname + archivePath, "utf-8", function(err, data){
+    if(err) console.log("error: " + err);
+    return JSON.stringify(data);
+  });
+
+  console.log(typeof alldata);
+  return alldata;
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(url){
+  var list = this.readListOfUrls().split('\n');
+  return _.contains(list, url); //["fb", 'google]
 };
 
 exports.addUrlToList = function(){
