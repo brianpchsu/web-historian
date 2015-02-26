@@ -13,7 +13,7 @@ var _ = require('underscore');
 exports.paths = {
   'siteAssets' : path.join(__dirname, '../web/public'),
   'archivedSites' : path.join(__dirname, '../archives/sites'),
-  'list' : path.join(__dirname, '../archives/sites.txt')
+  'list' : path.join(__dirname, '../web/archives/sites.txt')
 };
 
 // Used for stubbing paths for jasmine tests, do not modify
@@ -41,7 +41,7 @@ exports.readListOfUrls = function(callback){
 };
 
 exports.isUrlInList = function(url){
-  var alldata = fs.readFileSync(__dirname + archivePath, "utf-8", function(err, data){
+  var alldata = fs.readFileSync(this.paths.list, "utf-8", function(err, data){
       if(err) console.log("error: " + err);
       return JSON.stringify(data);
   });
@@ -50,6 +50,7 @@ exports.isUrlInList = function(url){
 };
 
 exports.addUrlToList = function(url){
+  console.log(this.paths.list);
   fs.appendFileSync(this.paths.list, url + "\n", "utf-8");
   //WRITE to sites.txt
 };
