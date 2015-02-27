@@ -4,6 +4,7 @@ var archive = require('../helpers/archive-helpers.js');
 var helpers = require('./http-helpers.js');
 var fs = require('fs');
 var qs = require('querystring');
+var fetcher = require('../workers/htmlfetcher.js');
 // require more modules/folders here!
 
 var headers = helpers.headers;
@@ -18,11 +19,14 @@ var serveHTML = function(url, req, res){
 
 exports.handleRequest = function (req, res) {
   var url = require('url').parse(req.url);
-  var pathname = require('url').parse(req.url).pathname;
-  var archivePath = "./archives/sites" + pathname;
+  var pathname = require('url').parse(req.url).pathname; // Just the /XXX of archivePath
+  var archivePath = "./archives/sites" + pathname; // ./archives/sites/XXX
   var defaultPath = './public/index.html';
   var redirectPath = './public/loading.html';
-  console.log(archivePath)
+  var fetcher = require('../workers/htmlfetcher.js');
+
+  // console.log("archivepath: " + archivePath);
+  // console.log("path: "+ pathname);
 
   if (req.method ==="GET"){
     if (pathname === '/') {
@@ -32,8 +36,10 @@ exports.handleRequest = function (req, res) {
       // res.end(JSON.stringify("<input"));
     } else if (pathname === '/public/loading.html') {
       serveHTML(redirectPath, req, res);
+      fetcher.fetchWebsite('www.reddit.com');
 
-    } else if (fs.existsSync(archivePath)) {
+    } else if (archive.isUrlInList(pathname.slice(1))) {
+      console.log("we're in this path")
       serveHTML(archivePath, req, res);
       // headers['Content-Type'] = 'application/json';
       // res.writeHead(200, headers);
